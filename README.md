@@ -1,12 +1,30 @@
-# scilog12
+# scilog12 — AI 과학 프로젝트 · 학생 연구노트 · 블록체인 봉인 포털
 
-중학교 1학년 ~ 고등학교 3학년 학생이 AI 도움을 받아 과학 프로젝트를 기획·기록하고, 부품을 구매하며, 연구노트를 공개 블록체인에 봉인하여 대학 입시 면접에 활용할 수 있도록 만든 웹 포털입니다.
+> **중학생 · 고등학생 과학 프로젝트를 AI 와 함께 기획하고, 연구노트를 블록체인에 봉인하여 대학 입시 면접에 활용하는 오픈소스 포털.**
+> Claude · Gemini · GROQ · DeepSeek 멀티 AI 워크벤치 + Stripe 부품 쇼핑몰 + Base 블록체인 공증.
+
+[![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](LICENSE)
+[![Next.js](https://img.shields.io/badge/Next.js-14-black)](https://nextjs.org)
+[![TypeScript](https://img.shields.io/badge/TypeScript-strict-3178c6)](https://www.typescriptlang.org)
+[![Blockchain](https://img.shields.io/badge/Anchor-Base%20Sepolia-0052ff)](https://sepolia.basescan.org)
+[![Live demo](https://img.shields.io/badge/demo-scilog12.iotok.org-22c55e)](https://scilog12.iotok.org)
 
 **라이브 데모:** https://scilog12.iotok.org
+**English:** [README.en.md](README.en.md)
+
+## 무엇을 하는 서비스인가요?
+
+scilog12 은 **중학교 1학년 ~ 고등학교 3학년** 학생이 다음을 한 곳에서 할 수 있게 해주는 웹 포털입니다.
+
+- **AI 과학 멘토링** — Claude, Gemini, GROQ, DeepSeek 을 한 화면에서 사용. 모든 프롬프트와 응답이 자동 저장되어 **연구 과정 전체가 추적 가능**합니다.
+- **학생 연구노트 (Lab Logbook)** — 8개 섹션 템플릿 + 마크다운 + 자동 저장. 입시 면접에서 "어떻게 했는지" 를 보여줄 수 있는 형태로 정리됩니다.
+- **STEM 부품 쇼핑몰** — Stripe 결제 + 주문 추적. Arduino · 3D 프린트 필라멘트 · 센서 등을 프로젝트 흐름 안에서 바로 구매.
+- **공개 블록체인 공증 (Notarization)** — 연구노트 + AI 대화 전체를 SHA-256 해시로 정규화한 뒤 Base Sepolia 의 `ScilogNotary` 컨트랙트에 봉인. **누가 언제 무엇을 만들었는지 위변조 불가능하게 증명**합니다.
+- **면접관 전용 검증 링크** — 대학 입학사정관이 토큰 URL 하나로 학생의 연구 기록과 블록체인 증명을 확인 가능.
+
+**대상**: 과학고 · 영재학교 · 자사고 입시, 대학 학종(학생부 종합전형) 자기소개서·면접 준비, STEM 동아리, 교사·튜터.
 
 Copyright © 2026 사단법인 나눔과기술 (Engineers and Scientists for Sharing). GNU General Public License v3.0 라이선스로 배포됩니다 — [LICENSE](LICENSE) 및 [COPYRIGHT](COPYRIGHT) 참조.
-
-English: [README.en.md](README.en.md)
 
 ## 구성 요소
 

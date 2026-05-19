@@ -11,3 +11,4 @@ cache
 typechain-types
 coverage
 prisma/migrations/dev.db*
+tsconfig.tsbuildinfo

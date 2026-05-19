@@ -1,10 +1,27 @@
-# scilog12
+# scilog12 — AI Science Logbook + Blockchain Notary for Students
 
-A web portal for year 7–12 students to plan and document science projects with AI assistance, buy parts, and lock their logbook on a public blockchain — ready for university admissions interviews.
+> **Open-source web portal for year 7–12 students** to plan science projects with multi-AI assistance (Claude · Gemini · GROQ · DeepSeek), buy parts via Stripe, and **anchor their research logbook on a public blockchain** — ready for university admissions interviews.
+
+[![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](LICENSE)
+[![Next.js](https://img.shields.io/badge/Next.js-14-black)](https://nextjs.org)
+[![TypeScript](https://img.shields.io/badge/TypeScript-strict-3178c6)](https://www.typescriptlang.org)
+[![Blockchain](https://img.shields.io/badge/Anchor-Base%20Sepolia-0052ff)](https://sepolia.basescan.org)
+[![Live demo](https://img.shields.io/badge/demo-scilog12.iotok.org-22c55e)](https://scilog12.iotok.org)
 
 **Live demo:** https://scilog12.iotok.org
+**한국어:** [README.md](README.md)
 
-한국어: [README.md](README.md)
+## What is scilog12?
+
+A single portal where **middle- and high-school students** can:
+
+- **Mentor with multi-AI** — Claude, Gemini, GROQ, DeepSeek side-by-side. Every prompt and reply is auto-saved so the *entire research process* is traceable.
+- **Keep a lab logbook** — 8-section template, markdown, autosave. The shape that admissions interviewers actually ask about.
+- **Buy STEM parts inline** — Stripe checkout + order tracking for Arduino, 3D-printer filament, sensors, breadboards, etc.
+- **Notarize on a public blockchain** — logbook + every AI conversation are canonicalized, hashed with SHA-256, and anchored on the Base Sepolia `ScilogNotary` contract. **Tamper-evident proof** of who built what, when.
+- **Interviewer verify-link** — university admissions officers open one token URL to see the student's record + on-chain proof.
+
+**Audience**: Korean science-high-school admissions, US/AU STEM college essays, STEM clubs, teachers and tutors.
 
 Copyright © 2026 사단법인 나눔과기술 (Engineers and Scientists for Sharing). Released under the GNU General Public License v3.0 — see [LICENSE](LICENSE) and [COPYRIGHT](COPYRIGHT).
 
