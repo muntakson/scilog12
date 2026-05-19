@@ -4,6 +4,8 @@ A web portal for year 7–12 students to plan and document science projects with
 
 **Live demo:** https://scilog12.iotok.org
 
+한국어: [README.ko.md](README.ko.md)
+
 Copyright © 2026 사단법인 나눔과기술 (Engineers and Scientists for Sharing). Released under the GNU General Public License v3.0 — see [LICENSE](LICENSE) and [COPYRIGHT](COPYRIGHT).
 
 ## What's inside
