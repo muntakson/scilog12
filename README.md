@@ -66,13 +66,54 @@ npx hardhat run scripts/deploy-notary.ts --network baseSepolia
 
 시드 데이터에는 Don이 Claude에게 OpenSCAD 슬라이드와 Arduino 스케치를 요청하는 실제 대화 기록이 포함된 프로젝트가 들어 있습니다. Don 계정으로 로그인한 뒤 비어 있는 연구노트 섹션을 채우고 **Submit & anchor** 를 누르면 봉인이 진행됩니다.
 
-## 추후 작업
+## TODO / 작업 목록
 
-- 실제 STL 생성 파이프라인 (AI → OpenSCAD → STL 렌더). 버튼과 저장 로직은 이미 연결되어 있고 렌더러만 스텁 상태입니다.
-- 메인넷 봉인 (현재는 Base Sepolia 테스트넷).
-- 교사 / 학교 대시보드.
-- 연구노트 섹션 내부 이미지 업로드 (마크다운 이미지 URL 은 동작, multipart 업로드는 미구현).
+코드베이스 자체 점검 결과입니다. 우선순위 순으로 정리했으며, 항목 옆에 관련 파일을 표기했습니다.
+
+### 🔥 즉시 수정 (정확성 · 보안 핵심 결함)
+
+- [ ] **봉인 해시 재생산 불가 버그** — 제출 시 `submittedAt: new Date().toISOString()` 을 해시 입력에 넣은 뒤(`src/app/api/projects/submit/route.ts:26`), DB 에는 별도의 `new Date()` 를 저장(`:40`). 두 값이 ms 단위로 어긋나 검증자가 동일 해시를 재계산할 수 없음. 한 변수로 통일 필요.
+- [ ] **XSS 위험** — `interview/[token]/page.tsx:50` 에서 `marked.parse(...)` 결과를 `dangerouslySetInnerHTML` 로 출력. `marked` 는 기본적으로 sanitize 하지 않으므로 학생이 `<script>` 를 연구노트에 삽입하면 면접관 브라우저에서 실행됨. DOMPurify 또는 `rehype-sanitize` 적용 필요. 로그북 에디터 프리뷰도 동일 점검.
+- [ ] **체인 봉인 실패 시 SUBMITTED 처리** — `submit/route.ts:37-49` 에서 `anchorOnChain` 실패를 catch 하고 그대로 SUBMITTED 마킹. 검증 페이지는 "제출됨" 인데 `txHash` 가 없는 모순 상태. 정책 결정 후 (재시도 큐 vs DRAFT 유지) 구현.
+- [ ] **로그인 페이지에 데모 자격증명 하드코딩** — `login/page.tsx:27-28,33` 에 `don@example.com / password123` 가 form `defaultValue` 와 안내 문구로 박혀 있음. `NEXT_PUBLIC_DEMO=1` 등의 플래그 뒤로 분리.
+- [ ] **`SESSION_SECRET` 누락 시 fallback** — `lib/session.ts:13` 이 약한 상수로 폴백. 프로덕션에서는 부팅 시 fail-fast 로 변경.
+
+### 🔒 보안
+
+- [ ] AI 채팅(`api/ai/chat`), 로그인, 회원가입에 레이트 리밋 (Upstash Redis 등). 현재는 학생 한 명이 무한히 API 키를 소비 가능.
+- [ ] 인터뷰 토큰 만료시간 강제 — `interview-tokens/route.ts` 에서 `expiresAt` 미설정. 기본 30일 등.
+- [ ] 모든 API 라우트에 zod 검증 통일 — 현재 chat 만 zod, submit/STL/interview-tokens 는 원시 `req.json()`.
+- [ ] 로그북 섹션 `content` 길이 상한 (`api/logbook/sections/[id]`) — 현재 무제한 → DB 폭발 가능.
+- [ ] Stripe 웹훅 멱등성 — `webhooks/stripe/route.ts` 가 동일 이벤트 재처리 시 카트 재삭제 / 주문 갱신. `event.id` 기반 dedupe.
+- [ ] bcrypt cost factor 12 로 상향 (현재 10).
+- [ ] `next.config.js` 에 CSP / HSTS / Referrer-Policy 헤더 추가.
+- [ ] AI 프로바이더 에러 메시지를 클라이언트로 그대로 노출하지 않도록 마스킹 (`api/ai/chat/route.ts:47-49`).
+
+### 🐛 정확성 / UX
+
+- [ ] AI 응답 스트리밍 (SSE) — 현재는 완전 응답 후 일괄 표시.
+- [ ] 결제 통화 설정 가능화 — `checkout/action.ts:51` 이 `usd` 고정인데 배송 기본은 `AU`. 환경변수화.
+- [ ] 주문 추적 — 운송사 / 추적 URL 필드 추가 (현재 번호 텍스트뿐).
+- [ ] 대화 이름 변경 / 삭제 기능.
+- [ ] 비밀번호 재설정 · 이메일 인증.
+- [ ] 메일 알림 (주문 생성 · 배송 · 프로젝트 제출).
+
+### 🧪 테스트 / 운영
+
+- [ ] 테스트 스위트 0개 → Vitest (단위) + Playwright (E2E) 도입. 최소: 봉인 해시 결정성, 권한 분리, Stripe 웹훅 멱등성.
+- [ ] GitHub Actions CI — typecheck · lint · build · test.
+- [ ] `prisma migrate` 기반 마이그레이션 히스토리로 전환 (현재 README 가 `db push` 안내).
+- [ ] env 변수 zod 검증 (`src/lib/env.ts`) — 부팅 시 fail-fast.
+- [ ] Dockerfile + `docker-compose.yml` (Postgres 포함) — 신규 기여자 온보딩.
+- [ ] 구조화된 로깅 (pino 등) — 현재 `console.error` 1곳.
+
+### ✨ 기능 (알려진 미완성)
+
+- [ ] 실제 STL 생성 파이프라인 (AI → OpenSCAD → STL 렌더). 버튼·저장은 연결됨, 렌더러만 스텁.
+- [ ] 연구노트 섹션 내부 이미지 업로드 (multipart). 마크다운 외부 URL 은 동작.
+- [ ] 교사 / 학교 대시보드.
+- [ ] 메인넷 봉인 (현재 Base Sepolia 테스트넷).
 
 ## 테스트
 
-이제 막 만들어진 코드베이스라 아직 테스트 스위트는 없습니다. `npm run build` 가 18개 라우트에 대해 TypeScript 타입 체크를 실행하며 현재 통과 상태입니다.
+위 TODO 의 첫 항목으로 도입 예정. 현재는 `npm run build` 의 TypeScript 타입 체크가 18개 라우트에 대해 통과하는 것이 유일한 안전망입니다.
