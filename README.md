@@ -2,6 +2,8 @@
 
 A web portal for year 7–12 students to plan and document science projects with AI assistance, buy parts, and lock their logbook on a public blockchain — ready for university admissions interviews.
 
+**Live demo:** https://scilog12.iotok.org
+
 Copyright © 2026 사단법인 나눔과기술 (Engineers and Scientists for Sharing). Released under the GNU General Public License v3.0 — see [LICENSE](LICENSE) and [COPYRIGHT](COPYRIGHT).
 
 ## What's inside
